@@ -364,3 +364,12 @@ Steam `data\` 当前保留历史备份：
 3. 构建包与安装包哈希是否一致。
 4. 最近的 `Documents\Battle Brothers\log.html` 是否有 Script Error。
 5. 若游戏升级，优先重新反编译 `scripts/skills/skill.cnut`，再维护命中率完整函数覆盖。
+
+## 2026-07-12 完整中文 UI 恢复（已构建并安装）
+
+- 根因：Git 同步后的标准构建只携带 `world_names.js` 和少量启动兜底函数；此前被禁用的狐狸汉化整包才含完整 `ui/ui.js`，因此菜单汉化消失。
+- 处理：从已禁用历史包只读核对并把完整 `ui.js` 纳入工程权威；没有重新启用夹带旧 Mod Hooks、旧 UI 入口和大量脚本的历史整包。
+- Breditor 固定加载顺序为 `world_names.js` → `ui.js` → `bbca_cn_ui_compat.js` → `mod_hooks.js`；兼容 helper 现在只在函数不存在时提供 no-op，不会覆盖完整汉化。
+- 19 份 `.nut` 已用 disposable `bbsq.exe -e` 编译。标准构建和安装器校验通过；组件包大小 `194474` 字节，构建与 Steam SHA-256 均为 `3C9CED0D25FE55694771205DA844E628FF02980689856E0818202758B81F65EB`。
+- 安装前游戏未运行；Steam 中 4 个既有 `.bbca-backup` 均未修改。
+- 待游戏内回归：主菜单、新战役、读档、角色/仓库按钮、大地图城镇与 tooltip 均显示中文；Shift+X 编辑器正常；`log.html` 无 `Translate* is not defined`、UI error 或 Script Error。

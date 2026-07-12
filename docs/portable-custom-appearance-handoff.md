@@ -261,13 +261,13 @@ Never delete, overwrite, copy over, or otherwise modify an existing
 
 The user explicitly resumed the narrow Chinese UI compatibility work on
 2026-07-12 after a Breditor replacement made the main menu black-screen.
-`mod_source/bb_custom_appearance/ui/world_names.js` and
-`mod_source/bb_custom_appearance/ui/bbca_cn_ui_compat.js` are now authoritative
-for the required world/tooltip and startup globals. `tools/patch_active_breditor_ui.ps1`
-writes both resources to the staged Breditor archive in the order
-`world_names.js` → helper → `mod_hooks.js`. The helper retains no-op fallbacks,
-but the installer now asserts the full world-name resource and its
-`TranslateTooltips`/`TranslateTownScreenNames` functions before writing Steam.
+`mod_source/bb_custom_appearance/ui/ui.js`, `world_names.js`, and
+`bbca_cn_ui_compat.js` are authoritative for the required menu, world/tooltip,
+and startup globals. `tools/patch_active_breditor_ui.ps1` writes all three into
+the staged Breditor archive in the order `world_names.js` → `ui.js` → fallback
+helper → `mod_hooks.js`. The helper must never override translations already
+defined by the two complete resources. The installer asserts all three files,
+their script tags, and their core translation functions before writing Steam.
 
 The known historical `mod_bbca_all_in_one_cn_compat.zip` contains stale copies
 of BBCA script paths and can override the authoritative component pack. The

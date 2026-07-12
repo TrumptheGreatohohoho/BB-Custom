@@ -43,6 +43,7 @@ if (!(Test-Path -LiteralPath $backupPath)) {
 $cssPath = Join-Path $root "mod_source\bb_custom_appearance\ui\mods\bb_custom_appearance.css"
 $jsPath = Join-Path $root "mod_source\bb_custom_appearance\ui\mods\bb_custom_appearance.js"
 $translationCompatPath = Join-Path $root "mod_source\bb_custom_appearance\ui\bbca_cn_ui_compat.js"
+$fullTranslationPath = Join-Path $root "mod_source\bb_custom_appearance\ui\ui.js"
 $worldNamesPath = Join-Path $root "mod_source\bb_custom_appearance\ui\world_names.js"
 $manifestPath = Join-Path $root "asset_repo\custom_appearance\manifest.json"
 $resourceStage = Join-Path $root "build\custom_appearance\_stage\mod"
@@ -51,7 +52,7 @@ $brushResourcePath = Join-Path $resourceStage $manifest.brushPath
 $atlasResourcePath = Join-Path $resourceStage $manifest.atlasPath
 $resourcePackPath = Join-Path $root ("build\custom_appearance\mod_" + $manifest.packName + ".zip")
 $usePackResources = !(Test-Path -LiteralPath $brushResourcePath) -or !(Test-Path -LiteralPath $atlasResourcePath)
-foreach ($path in @($cssPath, $jsPath, $translationCompatPath, $worldNamesPath, $manifestPath)) {
+foreach ($path in @($cssPath, $jsPath, $translationCompatPath, $fullTranslationPath, $worldNamesPath, $manifestPath)) {
     if (!(Test-Path -LiteralPath $path)) {
         throw "Missing UI patch file: $path"
     }
@@ -493,6 +494,7 @@ try {
     $cssTag = '<link rel="stylesheet" type="text/css" href="mods/bb_custom_appearance.css" />'
     $jsTag = '<script type="text/javascript" src="mods/bb_custom_appearance.js"></script>'
     $worldNamesTag = '<script type="text/javascript" src="world_names.js"></script>'
+    $fullTranslationTag = '<script type="text/javascript" src="ui.js"></script>'
     $translationCompatTag = '<script type="text/javascript" src="bbca_cn_ui_compat.js"></script>'
 
     if (!$mainHtml.Contains($cssTag)) {
@@ -526,10 +528,18 @@ try {
         $mainHtml = $mainHtml.Replace($translationCompatTag, "$worldNamesTag`r`n`t`t$translationCompatTag")
     }
 
+    if (!$mainHtml.Contains($fullTranslationTag)) {
+        if (!$mainHtml.Contains($translationCompatTag)) {
+            throw "Could not find the BBCA Chinese UI compatibility entry in ui/main.html"
+        }
+        $mainHtml = $mainHtml.Replace($translationCompatTag, "$fullTranslationTag`r`n`t`t$translationCompatTag")
+    }
+
     Set-ZipText $archive "ui/main.html" $mainHtml
     Set-ZipFile $archive "ui/mods/bb_custom_appearance.css" $cssPath
     Set-ZipFile $archive "ui/mods/bb_custom_appearance.js" $jsPath
     Set-ZipFile $archive "ui/world_names.js" $worldNamesPath
+    Set-ZipFile $archive "ui/ui.js" $fullTranslationPath
     Set-ZipFile $archive "ui/bbca_cn_ui_compat.js" $translationCompatPath
     if ($usePackResources) {
         Set-ZipArchiveEntry $archive ($manifest.brushPath -replace "\\", "/") $resourceArchive ($manifest.brushPath -replace "\\", "/")

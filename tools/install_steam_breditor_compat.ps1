@@ -67,7 +67,7 @@ Copy-Item -LiteralPath $breditorSource -Destination $stageArchive
 
 $archive = [System.IO.Compression.ZipFile]::OpenRead($stageArchive)
 try {
-    foreach ($required in @("ui/main.html", "ui/world_names.js", "ui/bbca_cn_ui_compat.js", "ui/mods/bb_custom_appearance.css", "ui/mods/bb_custom_appearance.js", "brushes/bb_custom_appearance.brush", "gfx/bb_custom_appearance.png")) {
+    foreach ($required in @("ui/main.html", "ui/world_names.js", "ui/ui.js", "ui/bbca_cn_ui_compat.js", "ui/mods/bb_custom_appearance.css", "ui/mods/bb_custom_appearance.js", "brushes/bb_custom_appearance.brush", "gfx/bb_custom_appearance.png")) {
         if ($null -eq $archive.GetEntry($required)) {
             throw "Steam compatibility archive is missing $required"
         }
@@ -77,6 +77,17 @@ try {
     $mainHtml = Read-ZipText $mainEntry
     if (!$mainHtml.Contains('<script type="text/javascript" src="world_names.js"></script>')) {
         throw "Steam compatibility archive does not load the Chinese world-name translation helper"
+    }
+    if (!$mainHtml.Contains('<script type="text/javascript" src="ui.js"></script>')) {
+        throw "Steam compatibility archive does not load the full Chinese UI translation helper"
+    }
+
+    $fullTranslationEntry = $archive.GetEntry("ui/ui.js")
+    $fullTranslationScript = Read-ZipText $fullTranslationEntry
+    foreach ($requiredText in @("var TranslatePopupDialog", "var TranslateDialog", "var TranslateButtons", "var TranslateSLCampaignMenuModule")) {
+        if (!$fullTranslationScript.Contains($requiredText)) {
+            throw "Steam compatibility full Chinese UI helper is missing $requiredText"
+        }
     }
 
     $worldNamesEntry = $archive.GetEntry("ui/world_names.js")
@@ -92,7 +103,7 @@ try {
 
     $translationEntry = $archive.GetEntry("ui/bbca_cn_ui_compat.js")
     $translationScript = Read-ZipText $translationEntry
-    foreach ($requiredText in @("var TranslateDialog", "var TranslateButtons", "var TranslateTooltips")) {
+    foreach ($requiredText in @('typeof TranslateDialog === "undefined"', 'typeof TranslateButtons === "undefined"', 'typeof TranslateAllWorldNames === "undefined"')) {
         if (!$translationScript.Contains($requiredText)) {
             throw "Steam compatibility translation helper is missing $requiredText"
         }
