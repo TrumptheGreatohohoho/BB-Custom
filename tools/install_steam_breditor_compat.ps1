@@ -3,7 +3,8 @@ param(
     [string]$GameDir = "D:\games\steam\steamapps\common\Battle Brothers",
     [string]$PackPath = "build/custom_appearance/mod_bb_custom_appearance.zip",
     [string]$BreditorSourceArchive = "",
-    [string]$ModHooksSourceArchive = ""
+    [string]$ModHooksSourceArchive = "",
+    [string]$ChineseRuntimeArchive = ""
 )
 
 $ErrorActionPreference = "Stop"
@@ -22,11 +23,15 @@ if ([string]::IsNullOrWhiteSpace($BreditorSourceArchive)) {
 if ([string]::IsNullOrWhiteSpace($ModHooksSourceArchive)) {
     $ModHooksSourceArchive = Join-Path $vendorDir "mod_hooks.zip-42-20-1-1621709174.zip"
 }
+if ([string]::IsNullOrWhiteSpace($ChineseRuntimeArchive)) {
+    $ChineseRuntimeArchive = Join-Path $vendorDir "data_bbca_fox_cn_runtime.zip"
+}
 $dataDir = Join-Path $GameDir "data"
 $modDir = $dataDir
 $packSource = Resolve-Path (Join-Path $root $PackPath)
 $breditorSource = Resolve-Path -LiteralPath $BreditorSourceArchive
 $modHooksSource = Resolve-Path -LiteralPath $ModHooksSourceArchive
+$chineseRuntimeSource = Resolve-Path -LiteralPath $ChineseRuntimeArchive
 
 if (!(Test-Path -LiteralPath (Join-Path $dataDir "data_001.dat"))) {
     throw "Steam game data archive was not found: $(Join-Path $dataDir 'data_001.dat')"
@@ -53,6 +58,26 @@ function Read-ZipText([System.IO.Compression.ZipArchiveEntry]$Entry) {
     finally {
         $reader.Dispose()
     }
+}
+
+$chineseArchive = [System.IO.Compression.ZipFile]::OpenRead($chineseRuntimeSource)
+try {
+    if ($chineseArchive.Entries.Count -lt 2400) {
+        throw "Managed Chinese runtime archive is unexpectedly incomplete"
+    }
+    foreach ($required in @("scripts/config/strings.nut", "scripts/skills/skill.nut", "ui/controls/button.js", "ui/screens/menu/modules/main_menu/main_menu_module.js", "ui/ui.js", "ui/world_names.js")) {
+        if ($null -eq $chineseArchive.GetEntry($required)) {
+            throw "Managed Chinese runtime archive is missing $required"
+        }
+    }
+    foreach ($forbidden in @("scripts/!mods_preload/!!redirect.nut", "scripts/!mods_preload/~~finalize.nut", "ui/main.html", "ui/mod_hooks.js")) {
+        if ($null -ne $chineseArchive.GetEntry($forbidden)) {
+            throw "Managed Chinese runtime archive contains conflicting entry $forbidden"
+        }
+    }
+}
+finally {
+    $chineseArchive.Dispose()
 }
 
 $stageRoot = Join-Path $root ("build\steam_breditor_compat_stage_" + [guid]::NewGuid().ToString("N"))
@@ -127,12 +152,15 @@ finally {
 $breditorDestination = Join-Path $modDir $breditorFileName
 $modHooksDestination = Join-Path $modDir (Split-Path -Leaf $modHooksSource)
 $packDestination = Join-Path $modDir (Split-Path -Leaf $packSource)
+$chineseRuntimeDestination = Join-Path $dataDir (Split-Path -Leaf $chineseRuntimeSource)
 
 Set-ManagedArchive -Source $stageArchive -Destination $breditorDestination -BackupSource $breditorSource
 Set-ManagedArchive -Source $modHooksSource -Destination $modHooksDestination -BackupSource $modHooksSource
 Set-ManagedArchive -Source $packSource -Destination $packDestination
+Set-ManagedArchive -Source $chineseRuntimeSource -Destination $chineseRuntimeDestination
 
 Write-Host "Installed Steam Breditor compatibility archive $breditorDestination"
 Write-Host "Installed Mod Hooks $modHooksDestination"
 Write-Host "Installed Custom Appearance pack $packDestination"
+Write-Host "Installed managed Chinese runtime archive $chineseRuntimeDestination"
 Write-Host "Breditor rollback backup $($breditorDestination).bbca-backup"

@@ -281,6 +281,14 @@ authorize a broader translation audit, translation build, or publication effort
 without a new explicit user scope. Do not use workspace-clone launchers,
 `steam_appid.txt`, ASCII `SUBST` paths, or Steam redirection workarounds.
 
+The complete localization runtime is now the managed vendor archive
+`vendor/data_bbca_fox_cn_runtime.zip`. It retains the fox translation's game
+scripts and translated UI modules, but must never contain `!!redirect.nut`,
+`~~finalize.nut`, `ui/mod_hooks.js`, or `ui/main.html`. Those four paths belong
+to current Mod Hooks and the patched Breditor entry point. The standard Steam
+installer validates this boundary and installs the runtime as
+`data/data_bbca_fox_cn_runtime.zip`.
+
 ## Development workflow
 
 The full workflow and validation matrix are maintained in

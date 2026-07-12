@@ -373,3 +373,11 @@ Steam `data\` 当前保留历史备份：
 - 19 份 `.nut` 已用 disposable `bbsq.exe -e` 编译。标准构建和安装器校验通过；组件包大小 `194474` 字节，构建与 Steam SHA-256 均为 `3C9CED0D25FE55694771205DA844E628FF02980689856E0818202758B81F65EB`。
 - 安装前游戏未运行；Steam 中 4 个既有 `.bbca-backup` 均未修改。
 - 待游戏内回归：主菜单、新战役、读档、角色/仓库按钮、大地图城镇与 tooltip 均显示中文；Shift+X 编辑器正常；`log.html` 无 `Translate* is not defined`、UI error 或 Script Error。
+
+## 2026-07-13 完整狐狸汉化运行层恢复（已构建并安装）
+
+- 2026-07-12 的 `ui.js` 修复不足：截图确认主菜单仍为英文。根因是狐狸汉化还依赖 34 个翻译 UI 模块和 2281 个中文游戏脚本；仅恢复翻译函数不会让原版控件调用它们。
+- 新增受管 `vendor/data_bbca_fox_cn_runtime.zip`，包含 2621 个条目、2281 个 `.nut` 和 34 个 `.js`。明确剔除旧 `!!redirect.nut`、`~~finalize.nut`、`ui/mod_hooks.js` 与冲突 `ui/main.html`。
+- 全部 2281 个 `.nut` 已使用 disposable `bbsq.exe -e` 编译，失败数为 0。运行包大小 `6832962` 字节，工程与 Steam SHA-256 均为 `0EAF5F0B7B89BFB9C196B42930104B4181152524D51BCA37B6FF55F9780BB647`。
+- 标准 BBCA 组件也已重建并重新安装。安装前后游戏未运行；4 个既有 `.bbca-backup` 未修改；原狐狸汉化历史包仍以 `.bbca-disabled` 保存且未修改。
+- 待游戏内回归：主菜单按钮中文；新战役、读档、角色、物品、事件、城镇、战斗与 tooltip 文本中文；Shift+X 及全部 BBCA 技能正常；新 `log.html` 无 Script Error/UI error。
