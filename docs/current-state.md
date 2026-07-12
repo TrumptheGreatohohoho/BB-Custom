@@ -7,8 +7,12 @@
 
 ## 环境
 
-- 工程目录：`D:\project\BB-Custom`
-- Steam 游戏目录：`D:\games\steam\steamapps\common\Battle Brothers`
+- GitHub 同步仓库：`https://github.com/TrumptheGreatohohoho/BB-Custom`，默认分支 `main`。
+- 两台电脑的工作副本目录允许不同：当前电脑使用 `D:\project\BB-Custom-2`；另一台电脑使用
+  `D:\project\BB-Custom`。当前电脑旧的 `D:\project\BB-Custom` 仍不是源码权威。
+- 下方 2026-07-12 构建/安装事实来自上传 GitHub 的另一台电脑；切换电脑后必须重新核对该机 Steam
+  路径和活动 ZIP，不能只凭本文件假定已安装。
+- 最近上传电脑的 Steam 游戏目录：`D:\games\steam\steamapps\common\Battle Brothers`
 - 游戏版本：`1.5.2.3`（来自 2026-06-28 的 `log.html`）
 - 游戏数据入口：`data\data_001.dat`
 - 最近一次安装结束时 `BattleBrothers.exe` 未运行。

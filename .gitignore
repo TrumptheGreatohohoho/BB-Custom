@@ -5,3 +5,9 @@ build/
 .DS_Store
 Thumbs.db
 *.log
+
+# Historical local handoff artifacts; kept on the original machine only
+BB-Custom-engineering-handoff.zip..sha256
+HANDOFF-MANIFEST.txt
+HANDOFF-SHA256SUMS.txt
+NEW-MACHINE-START..md

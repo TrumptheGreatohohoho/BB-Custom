@@ -9,6 +9,8 @@ Brothers. It contains no Chinese-translation packages or tooling.
 [`docs/README.md`](docs/README.md) 的顺序读取工程记忆。
 完整换机步骤和可直接复制的起手对白见
 [`NEW-MACHINE-START.md`](NEW-MACHINE-START.md)。
+两台电脑通过 GitHub 同步时，先读
+[`docs/git-sync.md`](docs/git-sync.md)，严格执行“开始前 pull、离开前 commit + push”。
 
 ## First installation
 

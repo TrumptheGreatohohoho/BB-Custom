@@ -12,6 +12,7 @@
 
 按任务再读：
 
+- `docs/git-sync.md`：两台电脑通过 GitHub 切换、提交、拉取和冲突处理规则。
 - `docs/png-asset-spec.md`：PNG 图层、尺寸和命名规范。
 - `docs/import-custom-appearance.md`：资产导入器和管理器用法。
 - `docs/engineering-log.md`：重要故障、根因、决策和验证证据。
@@ -33,6 +34,7 @@
 | `portable-custom-appearance-handoff.md` | 稳定架构和兼容契约 | 设计、ID、序列化或依赖变化时 |
 | `development-playbook.md` | 可重复操作和验证清单 | 工具链或测试方法变化时 |
 | `engineering-log.md` | 追加式问题与决策历史 | 每次重要修复或架构决策后 |
+| `git-sync.md` | 两机 GitHub 同步流程和边界 | 仓库、分支或同步方式变化时 |
 | 资产规范/导入说明 | 资产输入契约 | 图层、尺寸或导入流程变化时 |
 
 ## 维护规则
