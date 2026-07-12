@@ -1,0 +1,359 @@
+.world-breditor-screen .bbca-panel
+{
+    /* Anchor to the full screen, just beyond Breditor's right edge. */
+    left: 50%;
+    margin-left: 53.2rem;
+    right: auto;
+    width: 48.0rem;
+    top: 42.0rem;
+    bottom: auto;
+    height: 31.2rem;
+    padding: 1.6rem 2.0rem;
+    position: absolute;
+    box-sizing: border-box;
+    z-index: 100;
+    border: 2px solid rgba(202, 165, 91, 0.9);
+    background-color: rgba(19, 16, 12, 0.97);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.72);
+}
+
+.world-breditor-screen .bbca-title
+{
+    height: 3.6rem;
+    margin-bottom: 1.0rem;
+    color: #d8bd79;
+    font-family: "Cinzel";
+    font-size: 24px;
+    line-height: 3.6rem;
+}
+
+.world-breditor-screen .bbca-row
+{
+    height: 4.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1.0rem;
+}
+
+.world-breditor-screen .bbca-row label
+{
+    width: 9.0rem;
+    color: #c9c3b6;
+    font-size: 18px;
+    text-transform: capitalize;
+}
+
+.world-breditor-screen .bbca-role
+{
+    width: 9.0rem;
+    color: #c9c3b6;
+    font-family: "Cinzel";
+    font-size: 18px;
+    line-height: 3.6rem;
+    text-transform: capitalize;
+}
+
+.world-breditor-screen .bbca-select-wrap
+{
+    min-width: 0;
+    flex: 1 1 auto;
+    position: relative;
+}
+
+.world-breditor-screen .bbca-select
+{
+    width: 100%;
+    height: 3.6rem;
+    color: #e3dccb;
+    border: 1px solid #8c7449;
+    background-color: #24211d;
+    font-family: "Cinzel";
+    font-size: 16px;
+    padding: 0 3.4rem 0 0.8rem;
+    position: relative;
+    text-align: left;
+}
+
+.world-breditor-screen .bbca-select:after
+{
+    content: "▼";
+    color: #d8bd79;
+    font-size: 13px;
+    position: absolute;
+    right: 1.0rem;
+    top: 0.9rem;
+}
+
+.world-breditor-screen .bbca-menu
+{
+    left: 0;
+    right: 0;
+    top: 3.7rem;
+    position: absolute;
+    z-index: 110;
+    border: 1px solid #a78750;
+    background-color: #181511;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.85);
+}
+
+.world-breditor-screen .bbca-menu-option
+{
+    width: 100%;
+    min-height: 3.4rem;
+    color: #e3dccb;
+    border: 0;
+    border-bottom: 1px solid #55452d;
+    background-color: #24211d;
+    font-family: "Cinzel";
+    font-size: 16px;
+    padding: 0 0.8rem;
+    text-align: left;
+}
+
+.world-breditor-screen .bbca-menu-option:hover
+{
+    background-color: #5a4321;
+}
+
+.world-breditor-screen .bbca-apply
+{
+    width: 11.0rem;
+    height: 3.6rem;
+    color: #ede0bf;
+    border: 1px solid #a78750;
+    background-color: #5a4321;
+    font-family: "Cinzel";
+    font-size: 16px;
+}
+
+.world-breditor-screen .bbca-apply:disabled,
+.world-breditor-screen .bbca-select:disabled
+{
+    opacity: 0.5;
+}
+
+.world-breditor-screen .bbca-apply.bbca-applying
+{
+    color: #e6ce8d;
+    background-color: #695429;
+}
+
+.world-breditor-screen .bbca-apply.bbca-applied
+{
+    color: #e6f0d5;
+    border-color: #9fbc7f;
+    background-color: #476337;
+}
+
+.world-breditor-screen .bbca-apply.bbca-failed
+{
+    color: #f0d0c4;
+    border-color: #c07462;
+    background-color: #703a31;
+}
+
+.world-breditor-screen .bbca-status
+{
+    height: 2.4rem;
+    margin-top: 0.7rem;
+    overflow: hidden;
+    color: #9ebf8c;
+    font-size: 15px;
+    line-height: 2.4rem;
+    white-space: nowrap;
+}
+
+.world-breditor-screen .bbca-skill-panel
+{
+    left: 50%;
+    margin-left: 53.2rem;
+    right: auto;
+    width: 48.0rem;
+    top: 74.0rem;
+    height: 37.0rem;
+    padding: 1.4rem 2.0rem;
+    position: absolute;
+    box-sizing: border-box;
+    z-index: 100;
+    border: 2px solid rgba(112, 148, 176, 0.9);
+    background-color: rgba(14, 20, 27, 0.97);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.72);
+}
+
+.world-breditor-screen .bbca-skill-title
+{
+    height: 3.0rem;
+    margin-bottom: 0.4rem;
+    color: #a9d0e6;
+    font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif;
+    font-size: 21px;
+    line-height: 3.0rem;
+}
+
+.world-breditor-screen .bbca-skill-label
+{
+    height: 2.0rem;
+    color: #b9c5cf;
+    font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 2.0rem;
+}
+
+.world-breditor-screen .bbca-skill-select-wrap
+{
+    margin-bottom: 0.7rem;
+}
+
+/* The skill dropdown can hold non-ASCII labels (e.g. 异常免疫), so it must not
+   use the Latin-only "Cinzel" face that the appearance dropdowns use. */
+.world-breditor-screen .bbca-skill-select-wrap .bbca-select,
+.world-breditor-screen .bbca-skill-select-wrap .bbca-menu-option
+{
+    font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif;
+}
+
+.world-breditor-screen .bbca-skill-description
+{
+    min-height: 4.2rem;
+    margin-bottom: 0.7rem;
+    color: #d8e4ec;
+    font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.85rem;
+}
+
+.world-breditor-screen .bbca-skill-fields
+{
+    display: flex;
+    flex-wrap: wrap;
+    max-height: 11.6rem;
+    margin-bottom: 0.8rem;
+    overflow-y: auto;
+}
+
+.world-breditor-screen .bbca-skill-field
+{
+    display: flex;
+    align-items: center;
+    width: 50%;
+    min-width: 0;
+    height: 2.8rem;
+    box-sizing: border-box;
+    padding-right: 1.0rem;
+    color: #c6d2da;
+    font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 2.8rem;
+}
+
+.world-breditor-screen .bbca-skill-field span
+{
+    flex: 1 1 auto;
+    overflow: hidden;
+    padding-right: 0.5rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.world-breditor-screen .bbca-skill-input
+{
+    width: 6.2rem;
+    height: 2.7rem;
+    color: #eef5f8;
+    border: 1px solid #627b8c;
+    background-color: #1b2730;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    text-align: center;
+    cursor: text;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+.world-breditor-screen .bbca-skill-input:focus
+{
+    border-color: #a9d0e6;
+    background-color: #243847;
+    outline: none;
+}
+
+.world-breditor-screen .bbca-skill-toggle
+{
+    width: 7.3rem;
+    height: 2.7rem;
+    color: #eef5f8;
+    border: 1px solid #627b8c;
+    background-color: #1b2730;
+    box-sizing: border-box;
+    font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif;
+    font-size: 13px;
+    text-align: center;
+}
+
+.world-breditor-screen .bbca-skill-toggle.bbca-toggle-on
+{
+    color: #d7f0c8;
+    border-color: #6f9f5a;
+    background-color: #2f4a25;
+}
+
+.world-breditor-screen .bbca-skill-toggle.bbca-toggle-off
+{
+    color: #efc9c0;
+    border-color: #9f5a5a;
+    background-color: #4a2525;
+}
+
+.world-breditor-screen .bbca-skill-toggle-wrap
+{
+    width: 7.3rem;
+    flex: 0 0 7.3rem;
+    position: relative;
+}
+
+.world-breditor-screen .bbca-skill-toggle-menu
+{
+    left: 0;
+    right: 0;
+    top: 2.8rem;
+    position: absolute;
+    z-index: 120;
+    border: 1px solid #718ea2;
+    background-color: #142029;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.85);
+}
+
+.world-breditor-screen .bbca-skill-toggle-option
+{
+    width: 100%;
+    height: 2.7rem;
+    color: #eef5f8;
+    border: 0;
+    border-bottom: 1px solid #3e5666;
+    background-color: #1b2730;
+    font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif;
+    font-size: 13px;
+}
+
+.world-breditor-screen .bbca-skill-toggle-option:hover
+{
+    background-color: #385466;
+}
+
+.world-breditor-screen .bbca-skill-apply
+{
+    width: 16.0rem;
+    color: #e5f1f6;
+    border-color: #718ea2;
+    background-color: #385466;
+    font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif;
+}
+
+.world-breditor-screen .bbca-skill-status
+{
+    color: #b8d7ba;
+    font-family: "Microsoft YaHei", "SimSun", Arial, sans-serif;
+    font-size: 13px;
+}
+

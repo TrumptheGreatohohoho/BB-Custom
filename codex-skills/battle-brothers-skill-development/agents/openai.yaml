@@ -1,0 +1,4 @@
+interface:
+  display_name: "Battle Brothers Skill Development"
+  short_description: "Analyze and build Battle Brothers Squirrel skills"
+  default_prompt: "Use $battle-brothers-skill-development to analyze or implement a Battle Brothers skill safely."
