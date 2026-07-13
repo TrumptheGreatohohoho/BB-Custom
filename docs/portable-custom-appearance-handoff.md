@@ -224,6 +224,14 @@ during class registration before a campaign can load.
 effect also clears current fatigue at turn start. Both numeric values are
 clamped to 0–100 and the status icon is hidden by default.
 
+The fatigue reset is implemented only by the effect's `onTurnStart()` calling
+`actor.setFatigue(0)`. It must not inflate `FatigueRecoveryRate` or
+`FatigueRecoveryRateMult`: those properties are also exposed by the character
+screen and would make the out-of-combat panel show a fake recovery value. The
+standard installer disables the exact known legacy “8 + stamina / 10” fatigue
+recovery archive, whose outer `actor.onTurnStart()` wrapper otherwise restores
+the pre-reset fatigue after the skill container has run.
+
 ## Curated regenerating equipment
 
 Two standalone item classes are exposed through Breditor's existing

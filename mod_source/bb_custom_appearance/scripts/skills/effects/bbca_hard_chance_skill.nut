@@ -120,21 +120,5 @@ this.bbca_hard_chance_skill <- this.inherit("scripts/skills/skill", {
     function onUpdate( _properties )
     {
         this.m.IsHidden = !this.bbca_getBool("ShowStatusIcon", false);
-
-        // Compatibility with fatigue recovery mods that wrap actor.onTurnStart()
-        // outside the skill container. Some implementations save old fatigue,
-        // call the vanilla turn start (where this skill has already set fatigue
-        // to 0), then restore old fatigue and apply their own recovery formula.
-        // Raising the recovery rate for this actor makes those later formulas
-        // still resolve the start-of-turn fatigue to 0 without relying on ZIP
-        // load order or editing another mod.
-        local forcedRecovery = this.Math.max(1000, _properties.Stamina + 100);
-        _properties.FatigueRecoveryRate = this.Math.max(_properties.FatigueRecoveryRate, forcedRecovery);
-
-        if (_properties.FatigueRecoveryRateMult < 1.0)
-        {
-            _properties.FatigueRecoveryRateMult = 1.0;
-        }
     }
 });
-

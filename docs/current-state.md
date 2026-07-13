@@ -381,3 +381,12 @@ Steam `data\` 当前保留历史备份：
 - 全部 2281 个 `.nut` 已使用 disposable `bbsq.exe -e` 编译，失败数为 0。运行包大小 `6832962` 字节，工程与 Steam SHA-256 均为 `0EAF5F0B7B89BFB9C196B42930104B4181152524D51BCA37B6FF55F9780BB647`。
 - 标准 BBCA 组件也已重建并重新安装。安装前后游戏未运行；4 个既有 `.bbca-backup` 未修改；原狐狸汉化历史包仍以 `.bbca-disabled` 保存且未修改。
 - 待游戏内回归：主菜单按钮中文；新战役、读档、角色、物品、事件、城镇、战斗与 tooltip 文本中文；Shift+X 及全部 BBCA 技能正常；新 `log.html` 无 Script Error/UI error。
+
+## 2026-07-14 Hard Chance 面板疲劳恢复值修正（已构建，待安装）
+
+- 截图中的 `0 / 92 (1002)` 中，括号值是独立疲劳模组显示的每回合恢复量，不是最大疲劳。Hard Chance 为压过该模组此前在 `onUpdate()` 中把 `FatigueRecoveryRate` 强制提高到至少 1000，因而把内部兼容值泄漏到了战斗外面板。
+- 原版 `actor.onTurnStart()` 顺序已核对：先做原版疲劳恢复，再调用技能容器 `Skills.onTurnStart()`。因此在没有外层疲劳模组时，Hard Chance 的 `actor.setFatigue(0)` 会最后执行并可靠清空疲劳。
+- 已删除 Hard Chance 对 `FatigueRecoveryRate` / `FatigueRecoveryRateMult` 的修改，保留回合开始清空疲劳。新增精确 SHA-256 停用脚本，只处理已知 `98ACE863...448BE8` 的“8+面板疲劳÷10”活动 ZIP，并改名为 `.bbca-disabled`；不会修改任何 `.bbca-backup` 或未知文件。
+- 修改后的技能源码已用 disposable `bbsq.exe -e` 编译；标准构建及最终 ZIP 检查通过。构建大小 `194156` 字节，SHA-256 为 `30AD22B42C3B2CE6DCFF0C29DB85CDD4DA22563A21A49C20B5351C184FEA09CB`。
+- 当前 `BattleBrothers.exe` 正在运行，因此尚未写入 Steam、也尚未停用活动疲劳模组。待关闭游戏后通过标准安装器部署。
+- 待游戏内回归：战斗外疲劳行恢复为正常恢复数值；Hard Chance 角色每回合开始当前疲劳仍归零；无 Hard Chance 角色按原版恢复；角色面板、战术面板和 `log.html` 无错误。

@@ -30,3 +30,4 @@ else {
 
 & (Join-Path $PSScriptRoot "disable_known_legacy_hitchance_archive.ps1") -GameDir $GameDir
 & (Join-Path $PSScriptRoot "disable_known_legacy_bbca_all_in_one_archive.ps1") -GameDir $GameDir
+& (Join-Path $PSScriptRoot "disable_known_legacy_fatigue_recovery_archive.ps1") -GameDir $GameDir
