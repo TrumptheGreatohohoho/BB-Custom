@@ -517,3 +517,67 @@ Steam `data\狐狸汉化适配-命中率改为0-100.zip` 中的历史脚本直�
 用户确认第三方疲劳模组不再需要。核对当前 `actor.onTurnStart()` 后确认原版先恢复疲劳、后调用技能容器，因此移除外层包装后，Hard Chance 自己的 `onTurnStart() -> setFatigue(0)` 位于正确的最终位置。实现已删除属性注入，新增基于精确 SHA-256 扫描活动 ZIP 的可逆停用脚本，并接入标准安装器；未知哈希和所有 `.bbca-backup` 均不处理。哈希扫描也避免 Windows PowerShell 5.1 对无 BOM 脚本内中文文件名的错误解码。
 
 技能编译、标准构建和最终 ZIP 断言已通过，确认保留 `setFatigue(0)` 且包内不再出现 `forcedRecovery` 或 `FatigueRecoveryRate`。用户关闭游戏后已部署，组件构建/Steam 哈希一致；旧疲劳恢复包已改名为 `.bbca-disabled`。安装器为受管汉化运行包首次创建了一份新的回滚备份，备份总数由 4 变为 5；原有 4 份未改变，新增备份按铁律保留。面板与战斗回归仍待用户执行。
+
+## 2026-09-23：自定义 body 缺派生 brush（`_injured` / `_dead`），并修正日志路径认知
+
+### 现象与证据
+
+2026-08-15 的 `log.html`（511 行，**0 个 error**）中，`SceneManager` 标签共 9 行全部是
+`Unknown Brush requested: bbca_female_body_01_injured`。其余 24 条 warning 均为预期噪音
+（21 条 `data\` 非官方文件 `Unexpected file or directory`、云同步 vdf、"modified files"/
+"modified version" 提示）。
+
+顺带确认该次会话为可用状态：`Shadow Walk` 使用 3 次、`还击`、`盾墙`、`投掷投斧` 正常，
+`gfx/bb_custom_appearance.png` 正常加载卸载，`mod_bb_custom_appearance` 与
+`mod_bbca_hitchance` 均已注册。
+
+### 根因
+
+游戏从**当前生效的 body brush 名**派生受伤与尸体图层，而不是只用 `m.Bodies`：
+
+- `player.nut`（生命值 ≤ 40%）：`injury_body.setBrush(this.getSprite("body").getBrush().Name + "_injured")`
+- `human.nut:117`：`sprite_body.getBrush().Name + "_dead"`（**无 `doesBrushExist` 保护**）
+- `player.nut:956`：`decal.setBrush(sprite_body.getBrush().Name + "_dead")`
+
+BBCA 把 body 图层换成 `bbca_female_body_01` 后，派生名就落在 BBCA 的 brush 里，而该 brush
+只有 14 个基础精灵，于是受伤/尸体刷子必然缺失。
+
+### 资产来源判定（未新画素材）
+
+逐像素比对：`bbca_female_body_01` = FantasyBro `bust_naked_body_7869`，
+`bbca_female_body_02` = FantasyBro `bust_naked_body_7870`，差异像素均为 0；FantasyBro
+`metadata.xml` 中的几何与 `ic` 与 manifest 逐字段一致。FantasyBro 自身把**同一张**
+`bust_naked_body_7870_injured.png` 复用给 10 个 body（含 `7869_injured`），且该图与**原版**
+`bust_naked_body_02_injured.png` 字节相同；`_dead` 才是 FantasyBro 自有的尸图。
+故直接采用上游既有图形，符合"造型资产来自 FantasyBro"的既有来源约定。
+
+### 决策
+
+- 新增 4 个受管精灵：`bbca_female_body_01/02_injured`、`bbca_female_body_01/02_dead`。
+- 新增 `hidden` manifest 标记并在构建脚本中支持：隐藏精灵**进 brush 但不进 `::BBCA_Catalog`**。
+  这是必要的，因为后端 `bbca_isCatalogBrush()` 用 catalog 校验用户 APPLY，若把受伤/尸体刷子
+  混进 catalog，它们会出现在 `Shift+X` 面板并可被当成普通外观应用。
+- **不补** `_dead_arrows` / `_dead_javelin`：这两个 decal 取自 `appearance.Corpse` /
+  `appearance.CorpseArmor`，而 BBCA 从不改写 `m.Bodies` / `appearance.Corpse`（已 grep 确认），
+  因此它们始终解析为原版名，不会请求 BBCA 名。
+- 不修改任何 `.bbca-backup`；不触碰用户自有的第三方 ZIP。
+
+### 验证
+
+- 构建后 brush 含 18 个刷子名（14 可见 + 4 隐藏），catalog 仍为 14 项。
+- ZIP 仍 36 条路径；生成的 preload `.nut` 用 disposable `bbsq.exe -e` 编译通过。
+- 构建大小 `245140` 字节，SHA-256 `2E6975CAE6B67D2A1EE26C84C1B1EEA04D46080508BE19932CDA27A81BE2DA39`；
+  按常设授权部署后 Steam 包同哈希。安装前后游戏未运行，5 个 `.bbca-backup` 全部逐字节未变。
+
+### 附带修正：日志与存档路径
+
+`docs/` 多处（含 `current-state.md` "下次接手先检查"、`development-playbook.md` 第 6 节、
+`codex-skills` SKILL）把日志写成 `%USERPROFILE%\Documents\Battle Brothers\log.html`。
+2026-09-23 实测：该目录在 `D:\project\BB-Custom` 这台机器上**不存在**（`C:\Users` 下所有用户均无），
+日志与存档都在**游戏安装根目录**。已在上述指导性文档改为"两处都找、取最新"，并写明缺失路径
+不等于日志干净。`engineering-log.md` 的历史条目按追加规则保留原样。
+
+### 待人工回归
+
+让自定义女性身体角色生命值降到 40% 以下、以及阵亡产生尸体，确认新 `log.html` 不再出现
+`Unknown Brush requested`，且受伤与尸体外观正确。

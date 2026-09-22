@@ -15,6 +15,10 @@
 - 最近上传电脑的 Steam 游戏目录：`D:\games\steam\steamapps\common\Battle Brothers`
 - 游戏版本：`1.5.2.3`（来自 2026-06-28 的 `log.html`）
 - 游戏数据入口：`data\data_001.dat`
+- 日志与存档位置**取决于机器，不固定在 `Documents`**。2026-09-23 实测：`D:\project\BB-Custom`
+  这台机器的 `log.html` 与 `savegames\` 都在**游戏安装根目录**，而
+  `%USERPROFILE%\Documents\Battle Brothers\` 在该机**不存在**。核对日志时两处都看，
+  取修改时间最新的那份。
 - 最近一次安装结束时 `BattleBrothers.exe` 未运行。
 
 ## 当前构建与安装
@@ -290,7 +294,7 @@
   - 水面/不可燃地形、已有烟雾或瘴气、火焰免疫单位行为符合原版；
   - 高度差限制、定身、敌方控制区、投掷专精疲劳折扣和冷却符合配置；
   - 战斗结束后冷却复位，保存/读档后技能及 v1 参数持续存在；
-  - `%USERPROFILE%\Documents\Battle Brothers\log.html` 无相关 `Script Error`。
+  - `log.html`（游戏安装根目录或 `Documents\Battle Brothers\`，取最新）无相关 `Script Error`。
 
 ## 2026-06-28 Aegis 吞噬免疫状态
 
@@ -362,7 +366,9 @@ Steam `data\` 当前保留历史备份：
 1. `BattleBrothers.exe` 是否运行。
 2. Steam 游戏版本是否仍为 `1.5.2.3`。
 3. 构建包与安装包哈希是否一致。
-4. 最近的 `Documents\Battle Brothers\log.html` 是否有 Script Error。
+4. 最新的 `log.html` 是否有 Script Error。先在 `<游戏目录>\log.html` 找，再找
+   `%USERPROFILE%\Documents\Battle Brothers\log.html`；两处都不存在说明近期没跑过游戏，
+   不要据缺失路径判定"日志干净"。
 5. 若游戏升级，优先重新反编译 `scripts/skills/skill.cnut`，再维护命中率完整函数覆盖。
 
 ## 2026-07-12 完整中文 UI 恢复（已构建并安装）
@@ -391,3 +397,45 @@ Steam `data\` 当前保留历史备份：
 - 用户关闭游戏后已通过标准安装器部署；Steam 组件 SHA-256 与构建一致，均为 `30AD22B42C3B2CE6DCFF0C29DB85CDD4DA22563A21A49C20B5351C184FEA09CB`。已知旧疲劳恢复 ZIP 已改名为 `.bbca-disabled`，活动同哈希 ZIP 数为 0。
 - 安装器为此前已存在、但尚无回滚副本的受管汉化运行包首次创建了 `data_bbca_fox_cn_runtime.zip.bbca-backup`，因此 Steam 当前备份总数为 5；原有 4 个 `.bbca-backup` 的路径和 SHA-256 均未改变，新增备份也不得删除或覆盖。
 - 待游戏内回归：战斗外疲劳行恢复为正常恢复数值；Hard Chance 角色每回合开始当前疲劳仍归零；无 Hard Chance 角色按原版恢复；角色面板、战术面板和 `log.html` 无错误。
+
+## 2026-09-23 自定义 body 补齐 `_injured` / `_dead` 派生 brush（已构建并安装）
+
+- 从 2026-08-15 的游戏日志发现真实缺陷：`SceneManager` 报
+  `Unknown Brush requested: bbca_female_body_01_injured` 共 9 次。
+- 根因（已用本机 `1.5.2.3` 反编译原版确认）：受伤与尸体图层都从**当前生效的 body brush 名**派生。
+  `player.nut` 在生命值 ≤ 40% 时执行
+  `injury_body.setBrush(this.getSprite("body").getBrush().Name + "_injured")`；
+  `human.nut:117` 与 `player.nut:956` 执行
+  `sprite_body.getBrush().Name + "_dead"`（**无 `doesBrushExist` 保护**）。
+  因此自定义 body 必然被派生查询 `<id>_injured` 与 `<id>_dead`。
+- BBCA 的 `bbca_female_body_01` / `_02` 经逐像素比对确认等于 FantasyBro 的
+  `bust_naked_body_7869` / `7870`（差异像素 0），几何字段与 manifest 完全一致。
+  FantasyBro 自身就把同一张受伤图复用给 10 个身体，其 `_injured` 图形与**原版
+  `bust_naked_body_02_injured` 字节相同**，`_dead` 才是 FantasyBro 自有尸图。
+  因此本次修复**未新画任何素材**，只把上游既有图形纳入受管资产。
+- 新增 4 个受管 sprite：`bbca_female_body_01_injured`、`bbca_female_body_02_injured`、
+  `bbca_female_body_01_dead`、`bbca_female_body_02_dead`，几何与 `ic` 逐字段照抄 FantasyBro 的
+  `7869/7870` 对应定义。
+- 新增 `hidden` 标记及构建支持：隐藏 sprite **进 brush 但不进 `::BBCA_Catalog`**，
+  因此 `Shift+X` 面板与 `bbca_isCatalogBrush` 校验都不受影响（目录仍为 14 项）。
+- 编译后的 brush 含 **18** 个 brush 名（14 可见 + 4 隐藏）；ZIP 仍为 36 条路径；
+  生成的 preload `.nut` 通过 disposable `bbsq.exe -e`。
+- 构建与 Steam SHA-256 均为
+  `2E6975CAE6B67D2A1EE26C84C1B1EEA04D46080508BE19932CDA27A81BE2DA39`，大小 `245140` 字节。
+- 安装前后 `BattleBrothers.exe` 均未运行；5 个 `.bbca-backup` 的路径、大小与 SHA-256 全部与
+  安装前一致；`.bbca-disabled` 集合未变。
+- 已判定**不需要**补 `_dead_arrows` / `_dead_javelin`：`human.nut` / `player.nut` 中这两个 decal
+  取自 `appearance.Corpse` / `appearance.CorpseArmor`，而 BBCA 从不改写 `m.Bodies` 或
+  `appearance.Corpse`，所以它们始终解析为原版名。
+- 待人工回归：载入存档后让自定义女性身体角色生命值降到 40% 以下、以及阵亡产生尸体，
+  确认新 `log.html` 不再出现 `Unknown Brush requested`，且受伤/尸体外观正常。
+- 已做的静态验收（不需要进游戏的部分）：
+  - `tools/assert_custom_appearance_pack.ps1` 新建并运行通过，**70 项断言 0 失败**，
+    覆盖派生 brush、catalog 可见性、独狼 16、Hard Chance、Aegis v6、命中率、燃烧手雷 v2、
+    召唤 v1、两件自愈装备、汉化资源、Breditor 加载顺序、Steam 哈希与备份数量。
+  - **pack → unpack 往返验证**：把最终 brush 解包回来，18 个精灵**逐像素**与原图一致
+    （字节差异只是 bbrusher 重新编码 PNG）；与 2026-07-10 的旧构建解包结果比对，
+    原有 14 个精灵的几何字段**漂移为 0**，只新增 4 个 id、无删除。
+  - 顺带记录一个**先于本次改动就存在**的现象：`bbca_female_hair_05` 的 `left`/`right`
+    在 manifest 中为 `-30`/`30`，但 bbrusher 打包后会写成空值；2026-07-10 的旧构建完全相同，
+    因此不是本次回归，本次未追查。

@@ -42,7 +42,9 @@ Build from the game and mod code that is actually present. Treat skill IDs, seri
 3. Build and inspect the final ZIP, not only the source tree.
 4. Test grant, use, cooldown, combat end, save/load, and old-save migration.
 5. Exercise melee/ranged, ally/enemy, dead target, occupied tile, height, root, zone of control, and delayed-event cases relevant to the skill.
-6. Inspect `Documents/Battle Brothers/log.html` for `Script Error`.
+6. Inspect the newest `log.html` for `Script Error`. It lives in the **game install root** on some
+   machines and in `Documents/Battle Brothers/` on others; check both and use the most recently
+   modified one. A missing path is not evidence of a clean log.
 7. State clearly when in-game testing remains pending.
 
 ## Deployment Safety

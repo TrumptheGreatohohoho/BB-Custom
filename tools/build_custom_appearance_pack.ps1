@@ -87,7 +87,7 @@ foreach ($sprite in $manifest.sprites) {
 
     $node = $xml.CreateElement("sprite")
     foreach ($prop in $sprite.PSObject.Properties) {
-        if ($prop.Name -in @("source", "role", "label")) {
+        if ($prop.Name -in @("source", "role", "label", "hidden")) {
             continue
         }
         $attrName = if ($prop.Name -eq "source") { "img" } else { $prop.Name }
@@ -97,7 +97,7 @@ foreach ($sprite in $manifest.sprites) {
     $brush.AppendChild($node) | Out-Null
 }
 
-$catalogEntries = foreach ($sprite in $manifest.sprites) {
+$catalogEntries = foreach ($sprite in @($manifest.sprites | Where-Object { -not $_.hidden })) {
     $label = if ($sprite.label) { [string]$sprite.label } else { [string]$sprite.id }
     $safeLabel = $label.Replace("\", "\\").Replace('"', '\"')
     "    { ID = `"$($sprite.id)`", Role = `"$($sprite.role)`", Label = `"$safeLabel`" }"

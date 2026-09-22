@@ -196,6 +196,66 @@
       "right": "31",
       "top": "-7",
       "bottom": "51"
+    },
+    {
+      "id": "bbca_female_body_01_injured",
+      "role": "body",
+      "label": "Female body 01 injured",
+      "source": "sprites/bodies/bbca_female_body_01_injured.png",
+      "offsetY": "35",
+      "ic": "FF4D7124",
+      "width": "104",
+      "height": "142",
+      "left": "-41",
+      "right": "39",
+      "top": "-50",
+      "bottom": "10",
+      "hidden": true
+    },
+    {
+      "id": "bbca_female_body_02_injured",
+      "role": "body",
+      "label": "Female body 02 injured",
+      "source": "sprites/bodies/bbca_female_body_02_injured.png",
+      "offsetY": "35",
+      "ic": "FF0E0E77",
+      "width": "104",
+      "height": "142",
+      "left": "-41",
+      "right": "39",
+      "top": "-50",
+      "bottom": "10",
+      "hidden": true
+    },
+    {
+      "id": "bbca_female_body_01_dead",
+      "role": "body",
+      "label": "Female body 01 dead",
+      "source": "sprites/bodies/bbca_female_body_01_dead.png",
+      "offsetY": "10",
+      "ic": "FF4D7121",
+      "width": "131",
+      "height": "114",
+      "left": "-65",
+      "right": "66",
+      "top": "-57",
+      "bottom": "53",
+      "hidden": true
+    },
+    {
+      "id": "bbca_female_body_02_dead",
+      "role": "body",
+      "label": "Female body 02 dead",
+      "source": "sprites/bodies/bbca_female_body_02_dead.png",
+      "offsetY": "10",
+      "ic": "FF374D77",
+      "width": "131",
+      "height": "114",
+      "left": "-65",
+      "right": "66",
+      "top": "-57",
+      "bottom": "53",
+      "hidden": true
     }
   ]
 }

@@ -91,7 +91,24 @@ powershell -NoProfile -ExecutionPolicy Bypass `
 
 ## 6. 游戏回归与日志
 
-- 日志通常在 `%USERPROFILE%\Documents\Battle Brothers\log.html`。
+- 不需要进游戏的验收先跑静态断言脚本：
+
+  ```powershell
+  powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\assert_custom_appearance_pack.ps1
+  ```
+
+  它读取最终 ZIP（默认 `build/custom_appearance`），断言派生 brush、catalog 项数与可见性、
+  独狼 16 人 Hook、Hard Chance 已归一化疲劳、Aegis v6 与各 Hook 的 exact-class 写法、
+  命中率内嵌实现、燃烧手雷 v2、召唤 v1、两件自愈装备、汉化资源，并核对 Steam 包哈希与
+  `.bbca-backup` 数量。任何一项失败都会以非零码退出。**它不能替代游戏内回归**，
+  只保证"包内容与设计一致"。
+
+- 日志位置**不固定在 `Documents`**。2026-09-23 实测：`D:\project\BB-Custom` 这台机器的
+  日志和存档都写在**游戏安装根目录**（`<游戏目录>\log.html`、`<游戏目录>\savegames\`），
+  而 `%USERPROFILE%\Documents\Battle Brothers\` 在该机**不存在**。
+- 因此找日志时按顺序试：`<游戏目录>\log.html` → `%USERPROFILE%\Documents\Battle Brothers\log.html`，
+  取**修改时间最新**的那份；不要假设 `Documents` 一定存在。
+- 只有把新产生的 `log.html` 从头到尾看过，才能说某次回归"日志无错误"；不存在的路径不算验证。
 - 先按最小复现步骤测试，再搜索 `Script Error`、相关字段名和脚本路径。
 - 记录游戏版本、复现动作、错误文本、栈顶脚本和行号。
 - 修复后重复相同动作，并至少覆盖近战、远程、读档和技能保存中受影响的路径。

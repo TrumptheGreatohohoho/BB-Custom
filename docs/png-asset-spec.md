@@ -28,6 +28,21 @@
 - 显示名称最多 48 个可打印 ASCII 字符。当前注入式游戏 UI 对中文等非 ASCII 标签的显示不可靠。
 - ID 由工具自动生成，例如 `bbca_head_02`，不要手工复用已有 ID。
 
+## 派生 brush 与 `hidden` 标记
+
+游戏会从**当前生效的 body brush 名**派生受伤与尸体图层（`<id>_injured`、`<id>_dead`），
+所以每个自定义 `body` 都需要配套的派生精灵，否则角色重伤或阵亡时日志会出现
+`SceneManager ... Unknown Brush request`。详见 `engineering-log.md` 的 2026-09-23 条目。
+
+- 派生精灵的 `id` 必须**手工**写成精确的 `<基础 id>_injured` / `<基础 id>_dead`，
+  不能依赖导入器的自动编号；几何字段（`offsetY` / `ic` / `width` / `height` /
+  `left` / `right` / `top` / `bottom`）照抄对应上游 brush 的定义。
+- 派生精灵必须带 `"hidden": true`。隐藏精灵会进 brush 但**不进** `::BBCA_Catalog`，
+  因此显示在 `Shift+X` 面板里的外观清单不受影响；若漏掉该标记，受伤/尸体贴图会作为
+  可选外观出现在面板里，并被后端 `bbca_isCatalogBrush()` 接受。
+- `tools/import_custom_appearance_asset.ps1` 只处理用户新增的常规外观；派生精灵目前需要
+  手工写入 manifest 并放入 `sprites/bodies/`。
+
 ## 导入流程
 
 运行 `Manage-Custom-Appearance-Assets.bat`，在管理器中选择 PNG 和角色层并执行验证导入。
