@@ -1,6 +1,7 @@
 # 当前工程状态
 
-最近核对：2026-07-12。
+最近核对：**2026-09-23**（在 `D:\project\BB-Custom` 这台机器上重新核对；该日条目见文末）。
+此前为 2026-07-12。
 
 本文件只记录易变化的本机与部署事实。稳定设计见
 `docs/portable-custom-appearance-handoff.md`。
@@ -13,7 +14,8 @@
 - 下方 2026-07-12 构建/安装事实来自上传 GitHub 的另一台电脑；切换电脑后必须重新核对该机 Steam
   路径和活动 ZIP，不能只凭本文件假定已安装。
 - 最近上传电脑的 Steam 游戏目录：`D:\games\steam\steamapps\common\Battle Brothers`
-- 游戏版本：`1.5.2.3`（来自 2026-06-28 的 `log.html`）
+- 游戏版本：`1.5.2.3`（2026-06-28 的 `log.html`；2026-09-23 用最新 `log.html` 的
+  `<title>Battle Brothers 1.5.2.3</title>` 再次确认）
 - 游戏数据入口：`data\data_001.dat`
 - 日志与存档位置**取决于机器，不固定在 `Documents`**。2026-09-23 实测：`D:\project\BB-Custom`
   这台机器的 `log.html` 与 `savegames\` 都在**游戏安装根目录**，而

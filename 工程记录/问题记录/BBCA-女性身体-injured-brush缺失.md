@@ -115,6 +115,9 @@ FantasyBro `metadata.xml` 中这两个精灵的几何与 `ic` 与 manifest **逐
    `bbca_female_body_01_injured` / `_dead`）。
 4. 目视确认受伤图层与尸体外观正常；`bbca_female_body_02` 角色同样测一遍。
 
+👉 **完整触发步骤、通过/失败判据、要抓的日志字符串与待填结果表：
+`../验收记录/2026-09-23-injured-brush-游戏内验收.md`。**
+
 ## 7. 遗留观察（非本次回归）
 
 - `bbca_female_hair_05` 的 `left`/`right` 在 manifest 中为 `-30`/`30`，但 bbrusher 打包后
